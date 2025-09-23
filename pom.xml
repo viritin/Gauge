@@ -9,15 +9,24 @@
     </parent>
     <groupId>in.virit</groupId>
     <artifactId>gauge</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>Gauge</name>
     <packaging>jar</packaging>
     <organization>
         <name>Vaadin Community</name>
     </organization>
+    <url>https://github.com/viritin/Gauge</url>
+    <developers>
+        <developer>
+            <name>Matti Tahvonen</name>
+        </developer>
+        <developer>
+            <name>Claude Code :-)</name>
+        </developer>
+    </developers>
     <properties>
         <!-- The version used while developing/testing, update every once in a while -->
-        <vaadin.version>24.6.0</vaadin.version>
+        <vaadin.version>24.8.0</vaadin.version>
         <github.account>viritin</github.account>
         <github.project>Gauge</github.project>
     </properties>
@@ -55,7 +64,6 @@
 
         <!-- These here are all optional, but probably handy for testing -->        
 
-                
         <dependency>
             <groupId>in.virit</groupId>
             <artifactId>mopo</artifactId>
