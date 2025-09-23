@@ -6,7 +6,10 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.router.Route;
+import in.virit.color.Color;
+import in.virit.color.NamedColor;
 import org.vaadin.firitin.components.orderedlayout.VVerticalLayout;
+import org.vaadin.firitin.util.VStyle;
 
 @Route("temperature")
 public class TemperatureGaugeExample extends VVerticalLayout {
@@ -31,8 +34,8 @@ public class TemperatureGaugeExample extends VVerticalLayout {
 
         // Add status display
         statusLabel = new Span(getTemperatureStatus(20));
-        statusLabel.getStyle().set("font-size", "18px");
-        statusLabel.getStyle().set("font-weight", "bold");
+        statusLabel.getStyle().setFontSize("18px");
+        statusLabel.getStyle().setFontWeight("bold");
         add(statusLabel);
     }
 
@@ -82,12 +85,12 @@ public class TemperatureGaugeExample extends VVerticalLayout {
     }
 
     private void updateStatusColor(double temperature) {
-        String color;
-        if (temperature < 0) color = "#5BE12C";  // Green for cold
-        else if (temperature < 20) color = "#F5CD19";  // Yellow for cool
-        else if (temperature < 30) color = "#FF8C00";  // Orange for warm
-        else color = "#EA4228";  // Red for hot
+        Color color;
+        if (temperature < 0) color = NamedColor.GREEN;  // Green for cold
+        else if (temperature < 20) color = NamedColor.YELLOW;  // Yellow for cool
+        else if (temperature < 30) color = NamedColor.ORANGE;  // Orange for warm
+        else color = NamedColor.RED;  // Red for hot
 
-        statusLabel.getStyle().set("color", color);
+        VStyle.wrap(statusLabel.getStyle()).setColor(color);
     }
 }

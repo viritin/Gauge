@@ -32,12 +32,11 @@ public class HumidityGaugeExample extends VVerticalLayout {
 
         // Add status and recommendation displays
         statusLabel = new Span(getHumidityStatus(45));
-        statusLabel.getStyle().set("font-size", "18px");
-        statusLabel.getStyle().set("font-weight", "bold");
+        statusLabel.getStyle().setFontSize("18px");
+        statusLabel.getStyle().setFontWeight("bold");
 
         recommendationLabel = new Span(getHumidityRecommendation(45));
-        recommendationLabel.getStyle().set("font-size", "14px");
-        recommendationLabel.getStyle().set("font-style", "italic");
+        recommendationLabel.getStyle().setFontSize("14px");
 
         add(statusLabel, recommendationLabel);
     }

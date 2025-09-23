@@ -7,7 +7,10 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import in.virit.color.Color;
+import in.virit.color.HexColor;
 import org.vaadin.firitin.components.orderedlayout.VVerticalLayout;
+import org.vaadin.firitin.util.VStyle;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,8 +18,7 @@ import java.time.format.DateTimeFormatter;
 @Route("weather-dashboard")
 public class WeatherDashboardExample extends VVerticalLayout {
 
-    private TemperatureGauge temperatureGauge;
-    private HumidityGauge humidityGauge;
+    private EnvironmentMonitor environmentMonitor;
     private Span lastUpdated;
     private Span weatherStatus;
 
@@ -39,9 +41,9 @@ public class WeatherDashboardExample extends VVerticalLayout {
         // Header
         add(new H1("🌤️ Weather Dashboard"));
 
-        // Create gauges layout
-        HorizontalLayout gaugesLayout = createGaugesLayout();
-        add(gaugesLayout);
+        // Create environment monitor
+        environmentMonitor = new EnvironmentMonitor();
+        add(environmentMonitor);
 
         // Status and controls
         createStatusAndControls();
@@ -50,39 +52,20 @@ public class WeatherDashboardExample extends VVerticalLayout {
         updateWeather(CONDITIONS[0]);
     }
 
-    private HorizontalLayout createGaugesLayout() {
-        // Temperature gauge section
-        VerticalLayout tempSection = new VerticalLayout();
-        tempSection.add(new H3("🌡️ Temperature"));
-        temperatureGauge = new TemperatureGauge(20);
-        tempSection.add(temperatureGauge);
-        tempSection.setAlignItems(Alignment.CENTER);
-
-        // Humidity gauge section
-        VerticalLayout humiditySection = new VerticalLayout();
-        humiditySection.add(new H3("💧 Humidity"));
-        humidityGauge = new HumidityGauge(50);
-        humiditySection.add(humidityGauge);
-        humiditySection.setAlignItems(Alignment.CENTER);
-
-        HorizontalLayout gaugesLayout = new HorizontalLayout(tempSection, humiditySection);
-        gaugesLayout.setSizeFull();
-        gaugesLayout.setJustifyContentMode(JustifyContentMode.AROUND);
-
-        return gaugesLayout;
-    }
 
     private void createStatusAndControls() {
         // Weather status
-        weatherStatus = new Span();
-        weatherStatus.getStyle().set("font-size", "24px");
-        weatherStatus.getStyle().set("font-weight", "bold");
-        weatherStatus.getStyle().set("margin", "20px 0");
+        weatherStatus = new Span() {{
+            getStyle().setFontSize("24px");
+            getStyle().setFontWeight("bold");
+            getStyle().setMargin("20px 0");
+        }};
 
         // Last updated timestamp
-        lastUpdated = new Span();
-        lastUpdated.getStyle().set("font-size", "14px");
-        lastUpdated.getStyle().set("color", "#666");
+        lastUpdated = new Span() {{
+            getStyle().setFontSize("14px");
+            getStyle().setColor("#666");
+        }};
 
         // Weather condition buttons
         HorizontalLayout conditionsLayout = new HorizontalLayout();
@@ -103,8 +86,7 @@ public class WeatherDashboardExample extends VVerticalLayout {
     }
 
     private void updateWeather(WeatherCondition condition) {
-        temperatureGauge.setTemperature(condition.temperature);
-        humidityGauge.setHumidity(condition.humidity);
+        environmentMonitor.setEnvironmentValues(condition.temperature, condition.humidity);
 
         weatherStatus.setText(condition.icon + " " + condition.name +
             " - " + condition.temperature + "°C, " + condition.humidity + "%");
@@ -117,19 +99,19 @@ public class WeatherDashboardExample extends VVerticalLayout {
     }
 
     private void updateWeatherStatusColor(WeatherCondition condition) {
-        String color = "#000";
+        Color color = new HexColor("#000");
 
         if (condition.temperature > 30 && condition.humidity < 30) {
-            color = "#EA4228"; // Red for hot and dry
+            color = new HexColor("#EA4228"); // Red for hot and dry
         } else if (condition.temperature < 0) {
-            color = "#5BE12C"; // Green for cold
+            color = new HexColor("#5BE12C"); // Green for cold
         } else if (condition.humidity > 70) {
-            color = "#0066CC"; // Blue for humid
+            color = new HexColor("#0066CC"); // Blue for humid
         } else if (condition.temperature > 25) {
-            color = "#FF8C00"; // Orange for warm
+            color = new HexColor("#FF8C00"); // Orange for warm
         }
 
-        weatherStatus.getStyle().set("color", color);
+        VStyle.wrap(weatherStatus.getStyle()).setColor(color);
     }
 
     private void startAutoRefresh() {

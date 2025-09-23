@@ -90,8 +90,11 @@ public class Gauge extends ReactAdapterComponent {
             return this;
         }
 
-        public GaugeArc setColorArray(String... colors) {
-            this.colorArray = colors;
+        public GaugeArc setColorArray(Color... colors) {
+            this.colorArray = new String[colors.length];
+            for (int i = 0; i < colors.length; i++) {
+                this.colorArray[i] = colors[i] != null ? colors[i].toString() : "#000000";
+            }
             return this;
         }
 
@@ -111,11 +114,6 @@ public class Gauge extends ReactAdapterComponent {
         private String color;
         private Boolean showTick;
         private String tooltip;
-
-        public GaugeSubArc(double limit, String color) {
-            this.limit = limit;
-            this.color = color;
-        }
 
         public GaugeSubArc(double limit, Color color) {
             this.limit = limit;
@@ -152,11 +150,6 @@ public class Gauge extends ReactAdapterComponent {
 
         public GaugePointer setType(PointerType type) {
             this.type = type.getValue();
-            return this;
-        }
-
-        public GaugePointer setColor(String color) {
-            this.color = color;
             return this;
         }
 
