@@ -8,7 +8,7 @@
     </parent>
     <groupId>in.virit</groupId>
     <artifactId>gauge</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>Gauge</name>
     <packaging>jar</packaging>
     <organization>
@@ -33,7 +33,7 @@
         <url>https://github.com/${github.account}/${github.project}</url>
         <connection>scm:git:git://github.com/${github.account}/${github.project}.git</connection>
         <developerConnection>scm:git:ssh://git@github.com:/${github.account}/${github.project}.git</developerConnection>
-      <tag>gauge-1.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
     <issueManagement>
         <system>GitHub</system>
