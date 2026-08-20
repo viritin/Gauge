@@ -41,6 +41,16 @@ public class HumidityGauge extends Gauge {
         setValue(humidity);
     }
 
+    /**
+     * Sets the humidity, or clears it: {@code null} shows an empty dial with a
+     * dash where the reading would be. See {@link Gauge#setValue(Double)}.
+     *
+     * @param humidity the humidity, or null for no reading
+     */
+    public void setHumidity(Double humidity) {
+        setValue(humidity);
+    }
+
     public HumidityLevel getHumidityLevel(double humidity) {
         if (humidity < 20) return HumidityLevel.VERY_DRY;
         if (humidity < 30) return HumidityLevel.DRY;

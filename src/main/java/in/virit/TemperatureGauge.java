@@ -38,6 +38,16 @@ public class TemperatureGauge extends Gauge {
         setValue(temperature);
     }
 
+    /**
+     * Sets the temperature, or clears it: {@code null} shows an empty dial with a
+     * dash where the reading would be. See {@link Gauge#setValue(Double)}.
+     *
+     * @param temperature the temperature, or null for no reading
+     */
+    public void setTemperature(Double temperature) {
+        setValue(temperature);
+    }
+
     public void setTemperatureRange(double minTemp, double maxTemp) {
         setMinValue(minTemp);
         setMaxValue(maxTemp);

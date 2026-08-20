@@ -33,7 +33,31 @@ public class Gauge extends ReactAdapterComponent {
     }
 
     public void setValue(double value) {
+        setState("empty", false);
         setState("value", value);
+    }
+
+    /**
+     * Sets the value, or clears it.
+     * <p>
+     * With {@code null} the gauge shows an empty dial: nothing is reached, the
+     * pointer is hidden and the reading is a dash. The dial itself stays, so a
+     * card does not jump when a sensor has no reading yet — which is also why
+     * this is an overload rather than a separate method: the value a caller has
+     * is often nullable, and "no reading" is one of its values.
+     *
+     * @param value the value, or null for no value
+     */
+    public void setValue(Double value) {
+        /*
+           Emptiness travels as a state of its own rather than as a null value:
+           the React adapter treats a null state as absent and hands the browser
+           the default instead, which turned "no reading" into a reading of zero.
+        */
+        setState("empty", value == null);
+        if (value != null) {
+            setState("value", value);
+        }
     }
 
     public void setMinValue(double minValue) {

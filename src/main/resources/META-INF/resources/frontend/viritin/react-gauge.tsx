@@ -5,6 +5,7 @@ import { GaugeComponent } from 'react-gauge-component';
 class ReactGaugeElement extends ReactAdapterElement {
   protected override render(hooks: RenderHooks): ReactElement | null {
     const [value] = hooks.useState('value', 0);
+    const [empty] = hooks.useState('empty', false);
     const [minValue] = hooks.useState('minValue', 0);
     const [maxValue] = hooks.useState('maxValue', 100);
     const [type] = hooks.useState('type', 'semicircle');
@@ -36,8 +37,12 @@ class ReactGaugeElement extends ReactAdapterElement {
       return cleaned;
     };
 
+    // Emptiness is a state of its own rather than a sentinel number, since any
+    // number a gauge can show is a value somebody's sensor can produce. The dial
+    // is drawn, nothing on it is reached, the pointer is hidden and the reading
+    // is a dash; the component itself needs a number, so it sits at its minimum.
     const props: any = {
-      value: value || 0,
+      value: empty ? (minValue || 0) : (value || 0),
       minValue: minValue || 0,
       maxValue: maxValue || 100
     };
@@ -54,11 +59,12 @@ class ReactGaugeElement extends ReactAdapterElement {
       }
     }
 
-    if (pointer && typeof pointer === 'object') {
-      const cleanedPointer = deepClean(pointer);
-      if (Object.keys(cleanedPointer).length > 0) {
-        props.pointer = cleanedPointer;
-      }
+    const cleanedPointer = (pointer && typeof pointer === 'object') ? deepClean(pointer) : {};
+    if (empty) {
+      cleanedPointer.hide = true;
+    }
+    if (Object.keys(cleanedPointer).length > 0) {
+      props.pointer = cleanedPointer;
     }
 
     // Handle labels and formatTextValue for specialized gauge types
@@ -70,17 +76,24 @@ class ReactGaugeElement extends ReactAdapterElement {
         labelsToUse.valueLabel = {};
       }
 
-      // Add appropriate formatTextValue function
+      // Add appropriate formatTextValue function. An empty gauge keeps its
+      // unit next to the dash, so the dial still says what it would measure.
       if (gaugeType === 'temperature') {
         const unit = temperatureUnit === 'fahrenheit' ? '°F' : '°C';
-        labelsToUse.valueLabel.formatTextValue = (value: number) => value + unit;
+        labelsToUse.valueLabel.formatTextValue = (value: number) => (empty ? '–' : value) + unit;
       } else if (gaugeType === 'humidity') {
-        labelsToUse.valueLabel.formatTextValue = (value: number) => value + '%';
+        labelsToUse.valueLabel.formatTextValue = (value: number) => (empty ? '–' : value) + '%';
       }
 
       props.labels = labelsToUse;
-    } else if (labels && typeof labels === 'object') {
-      const cleanedLabels = deepClean(labels);
+    } else {
+      const cleanedLabels = (labels && typeof labels === 'object') ? deepClean(labels) : {};
+      if (empty) {
+        if (!cleanedLabels.valueLabel) {
+          cleanedLabels.valueLabel = {};
+        }
+        cleanedLabels.valueLabel.formatTextValue = () => '–';
+      }
       if (Object.keys(cleanedLabels).length > 0) {
         props.labels = cleanedLabels;
       }
