@@ -25,7 +25,7 @@
     </developers>
     <properties>
         <!-- The version used while developing/testing, update every once in a while -->
-        <vaadin.version>25.0.0</vaadin.version>
+        <vaadin.version>25.2.6</vaadin.version>
         <github.account>viritin</github.account>
         <github.project>Gauge</github.project>
     </properties>
@@ -51,7 +51,7 @@
         <dependency>
             <groupId>in.virit</groupId>
             <artifactId>color</artifactId>
-            <version>0.0.4</version>
+            <version>1.2.0</version>
         </dependency>
 
         <dependency>
@@ -73,7 +73,7 @@
         <dependency>
             <groupId>in.virit</groupId>
             <artifactId>viritin</artifactId>
-            <version>3.0.0</version>
+            <version>3.8.0</version>
             <scope>test</scope>
         </dependency>
 
