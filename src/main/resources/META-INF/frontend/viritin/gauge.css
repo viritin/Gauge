@@ -1,0 +1,16 @@
+/*
+   The two things every page had to say about this component before it could be
+   used at all.
+
+   Block, because a dial is a block of content and the custom element would
+   otherwise be inline. And visible overflow on the SVG, because the range
+   labels sit on its bottom edge and an SVG clips its own overflow by default —
+   they rendered sliced in half on every page that did not know this rule.
+*/
+react-gauge {
+  display: block;
+}
+
+react-gauge > div > svg {
+  overflow: visible;
+}

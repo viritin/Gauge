@@ -67,9 +67,28 @@ class ReactGaugeElement extends ReactAdapterElement {
       props.pointer = cleanedPointer;
     }
 
+    // The dial's text follows the page. react-gauge-component's own defaults are
+    // fixed white with a black text shadow — a treatment for text drawn over an
+    // arbitrary photo, which this is not: the reading sits in the hole of the
+    // dial, on whatever surface the page put it on. currentColor is how a
+    // component asks its page for the right colour, and it is only a default —
+    // labels given from the server win.
+    const themedText = { fill: 'currentColor', textShadow: 'none' };
+    const applyTextDefaults = (l: any) => {
+      l.valueLabel = { style: { ...themedText }, ...l.valueLabel };
+      if (l.valueLabel.style === undefined) l.valueLabel.style = { ...themedText };
+      l.tickLabels = l.tickLabels || {};
+      l.tickLabels.defaultTickValueConfig = {
+        style: { fill: 'currentColor', opacity: 0.7 },
+        ...l.tickLabels.defaultTickValueConfig
+      };
+      return l;
+    };
+
     // Handle labels and formatTextValue for specialized gauge types
     if (gaugeType === 'temperature' || gaugeType === 'humidity') {
-      const labelsToUse = (labels && typeof labels === 'object') ? deepClean(labels) : {};
+      const labelsToUse = applyTextDefaults(
+          (labels && typeof labels === 'object') ? deepClean(labels) : {});
 
       // Ensure valueLabel exists
       if (!labelsToUse.valueLabel) {
@@ -87,16 +106,15 @@ class ReactGaugeElement extends ReactAdapterElement {
 
       props.labels = labelsToUse;
     } else {
-      const cleanedLabels = (labels && typeof labels === 'object') ? deepClean(labels) : {};
+      const cleanedLabels = applyTextDefaults(
+          (labels && typeof labels === 'object') ? deepClean(labels) : {});
       if (empty) {
         if (!cleanedLabels.valueLabel) {
           cleanedLabels.valueLabel = {};
         }
         cleanedLabels.valueLabel.formatTextValue = () => '–';
       }
-      if (Object.keys(cleanedLabels).length > 0) {
-        props.labels = cleanedLabels;
-      }
+      props.labels = cleanedLabels;
     }
 
     return <GaugeComponent {...props} />;

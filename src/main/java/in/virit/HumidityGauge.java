@@ -14,11 +14,12 @@ public class HumidityGauge extends Gauge {
 
     public HumidityGauge(double humidity) {
         super();
-        setupHumidityDefaults();
+        resetToDefaults();
         setHumidity(humidity);
     }
 
-    private void setupHumidityDefaults() {
+    /** Restores the stock range and colours; see {@link TemperatureGauge#resetToDefaults()}. */
+    public void resetToDefaults() {
         setState("gaugeType", "humidity");
         setArc(new GaugeArc()
             .setSubArcs(

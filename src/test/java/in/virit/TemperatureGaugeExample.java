@@ -52,11 +52,13 @@ public class TemperatureGaugeExample extends VVerticalLayout {
         Button coldButton = new Button("Simulate Cold (-10°C)", e -> setTemperature(-10));
         Button normalButton = new Button("Simulate Normal (22°C)", e -> setTemperature(22));
         Button hotButton = new Button("Simulate Hot (35°C)", e -> setTemperature(35));
+        Button noReading = new Button("No reading",
+                e -> temperatureGauge.setTemperature((Double) null));
 
         HorizontalLayout controls = new HorizontalLayout(temperatureInput, updateButton);
         controls.setAlignItems(Alignment.END);
 
-        HorizontalLayout presets = new HorizontalLayout(coldButton, normalButton, hotButton);
+        HorizontalLayout presets = new HorizontalLayout(coldButton, normalButton, hotButton, noReading);
 
         add(controls, presets);
     }

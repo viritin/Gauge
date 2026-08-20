@@ -1,6 +1,8 @@
 package in.virit;
 
+import com.vaadin.flow.component.HasSize;
 import com.vaadin.flow.component.Tag;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.react.ReactAdapterComponent;
@@ -12,19 +14,26 @@ import in.virit.color.Color;
  */
 @NpmPackage(value = "react-gauge-component", version = "1.2.64")
 @JsModule("./viritin/react-gauge.tsx")
+@CssImport("./viritin/gauge.css")
 @Tag("react-gauge")
-public class Gauge extends ReactAdapterComponent {
+public class Gauge extends ReactAdapterComponent implements HasSize {
 
     public Gauge() {
         initializeDefaults();
     }
 
+    /*
+       Nothing about looks in here. Earlier versions painted an opaque dark grey
+       behind the dial and rounded its corners — a look chosen for one demo page,
+       which every application on any other background had to fight with
+       !important. A component drawn on someone else's surface has no business
+       bringing its own; the dial's text likewise follows currentColor, so the
+       gauge takes the colours of whatever it sits on.
+    */
     private void initializeDefaults() {
         setValue(0.0);
         setMinValue(0.0);
         setMaxValue(100.0);
-        getStyle().setBackground("rgb(40, 44, 52)");
-        getStyle().setBorderRadius("2em");
     }
 
     public Gauge(double value) {
