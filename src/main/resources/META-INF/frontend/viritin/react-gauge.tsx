@@ -90,6 +90,11 @@ class ReactGaugeElement extends ReactAdapterElement {
     // dial still says what it would measure.
     const labelsToUse = applyTextDefaults(
         (labels && typeof labels === 'object') ? deepClean(labels) : {});
+    // A format can only be a function here; a string from the server (the
+    // deprecated setFormatTextValue) would make the dial fail to render.
+    if (typeof labelsToUse.valueLabel.formatTextValue !== 'function') {
+      delete labelsToUse.valueLabel.formatTextValue;
+    }
     if (decimals >= 0) {
       labelsToUse.valueLabel.maxDecimalDigits = decimals;
     }

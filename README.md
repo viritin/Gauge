@@ -1,12 +1,14 @@
 # Gauge
 
-A Gauge component for Vaadin 24+. See [Directory page](https://vaadin.com/directory/component/gauge) for more details.
+A Gauge component for Vaadin 25 (Vaadin 24 up to version 1.2). See [Directory page](https://vaadin.com/directory/component/gauge) for more details.
 
 Built on top of https://github.com/antoniolago/react-gauge-component
 
 Also contains more specific components like HumidityGauge, TemperatureGauge and EnvironmentMonitor.
 
 The `test` directory contains a small Spring Boot application with examples.
+The jar has a Jandex index, so Quarkus finds the component without
+`quarkus.index-dependency` configuration.
 
 Trivial usage example:
 

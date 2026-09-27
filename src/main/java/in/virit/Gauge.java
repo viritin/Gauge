@@ -19,6 +19,8 @@ import in.virit.color.Color;
 @Tag("react-gauge")
 public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
 
+    private GaugeArc arc = new GaugeArc();
+
     public Gauge() {
         initializeDefaults();
     }
@@ -108,14 +110,15 @@ public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
         setState("decimals", decimals);
     }
 
+    /** Sets the arc's width, keeping the rest of the arc (its colours) as it is. */
     public void setArcWidth(int width) {
-        GaugeArc currentArc = getCurrentArc();
-        currentArc.setWidth(width);
-        setState("arc", currentArc);
+        arc.setWidth(width);
+        setState("arc", arc);
     }
 
     public void setArc(GaugeArc arc) {
-        setState("arc", arc != null ? arc : new GaugeArc());
+        this.arc = arc != null ? arc : new GaugeArc();
+        setState("arc", this.arc);
     }
 
     public void setPointer(GaugePointer pointer) {
@@ -124,10 +127,6 @@ public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
 
     public void setLabels(GaugeLabels labels) {
         setState("labels", labels != null ? labels : new GaugeLabels());
-    }
-
-    private GaugeArc getCurrentArc() {
-        return new GaugeArc(); // In a real implementation, you might want to get the current arc
     }
 
     public static class GaugeArc {
@@ -278,6 +277,14 @@ public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
             return this;
         }
 
+        /**
+         * Never worked: react-gauge-component calls this as a function of the
+         * value, and a string from the server made the dial fail to render. It is
+         * now ignored.
+         *
+         * @deprecated use {@link Gauge#setUnit(String)} and {@link Gauge#setDecimals(int)}
+         */
+        @Deprecated(since = "1.3.0", forRemoval = true)
         public GaugeValueLabel setFormatTextValue(String format) {
             this.formatTextValue = format;
             return this;
@@ -308,6 +315,13 @@ public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
             return this;
         }
 
+        /**
+         * Never had an effect: react-gauge-component does not read a format from
+         * here.
+         *
+         * @deprecated has no effect
+         */
+        @Deprecated(since = "1.3.0", forRemoval = true)
         public GaugeTickLabels setFormatTextValue(String format) {
             this.formatTextValue = format;
             return this;

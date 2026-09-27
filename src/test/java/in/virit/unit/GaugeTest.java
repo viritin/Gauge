@@ -40,6 +40,16 @@ public class GaugeTest {
         assertThrows(IllegalArgumentException.class, () -> gauge.setDecimals(-1));
     }
 
+    /** Once, setting the width replaced the arc with an empty one and its colours were gone. */
+    @Test
+    public void theArcWidthKeepsTheColours() {
+        StateProbe gauge = new StateProbe();
+        gauge.setArcWidth(10);
+        String arc = gauge.state("arc", tools.jackson.databind.JsonNode.class).toString();
+        assertTrue(arc.contains("subArcs"), arc);
+        assertTrue(arc.contains("\"width\":10"), arc);
+    }
+
     /** The stylesheet reserves the height by type, so the type is also an attribute. */
     @Test
     public void theTypeIsAnAttributeForTheStylesheet() {
