@@ -20,7 +20,8 @@ public class HumidityGauge extends Gauge {
 
     /** Restores the stock range and colours; see {@link TemperatureGauge#resetToDefaults()}. */
     public void resetToDefaults() {
-        setState("gaugeType", "humidity");
+        setUnit("%");
+        setDecimals(0);
         setArc(new GaugeArc()
             .setSubArcs(
                 new GaugeSubArc(30, NamedColor.RED).setTooltip("Dry"),

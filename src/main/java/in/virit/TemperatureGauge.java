@@ -31,7 +31,9 @@ public class TemperatureGauge extends Gauge {
     public void resetToDefaults() {
         setMinValue(-40);
         setMaxValue(50);
-        setState("gaugeType", "temperature");
+        setUnit("°C");
+        // A tenth of a degree is as fine as a room thermometer is worth reading
+        setDecimals(1);
         /*
            A cold-to-hot ramp, not a traffic light. The old defaults were green,
            yellow, orange and red — a scale of goodness, which is the wrong
@@ -72,8 +74,7 @@ public class TemperatureGauge extends Gauge {
     }
 
     public void setTemperatureUnit(TemperatureUnit unit) {
-        String unitSymbol = unit == TemperatureUnit.FAHRENHEIT ? "fahrenheit" : "celsius";
-        setState("temperatureUnit", unitSymbol);
+        setUnit(unit == TemperatureUnit.FAHRENHEIT ? "°F" : "°C");
     }
 
     public enum TemperatureUnit {

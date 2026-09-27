@@ -18,6 +18,26 @@ add(gauge);
 
 
 
+The reading can carry a unit and a fixed number of decimals; `TemperatureGauge`
+and `HumidityGauge` set theirs (°C with one decimal, % with none):
+
+```java
+Gauge pressure = new Gauge();
+pressure.setUnit(" hPa");
+pressure.setDecimals(0);
+```
+
+## Size
+
+The gauge is a block as wide as its container, and it reserves its height
+before the dial is drawn (5:3 for a semicircle), so a page does not jump when it
+appears. Limit and place it like any component:
+
+```java
+gauge.setMaxWidth("20rem");
+gauge.getStyle().setMargin("0 auto");
+```
+
 ## Theming
 
 The gauge takes its colours from the page. The dial's reading and range labels

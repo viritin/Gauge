@@ -1,16 +1,30 @@
 /*
-   The two things every page had to say about this component before it could be
-   used at all.
+   What every page had to say about this component before it could be used at
+   all.
 
    Block, because a dial is a block of content and the custom element would
-   otherwise be inline. And visible overflow on the SVG, because the range
-   labels sit on its bottom edge and an SVG clips its own overflow by default —
-   they rendered sliced in half on every page that did not know this rule.
+   otherwise be inline.
+
+   A height before the dial is drawn: react-gauge-component measures its width
+   and draws only after the first render, so without a reserved height a page
+   jumps when the gauge appears. A semicircle is 5:3 at any width. A radial
+   dial is not quite proportional (taller when small), so its ratio is a floor;
+   aspect-ratio never keeps content from growing the box.
+
+   A block SVG, so no line-height gap is left under it, and visible overflow,
+   because the range labels sit on its bottom edge and an SVG clips its own
+   overflow by default.
 */
 react-gauge {
   display: block;
+  aspect-ratio: 5 / 3;
+}
+
+react-gauge[type="radial"] {
+  aspect-ratio: 4 / 3;
 }
 
 react-gauge > div > svg {
+  display: block;
   overflow: visible;
 }

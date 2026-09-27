@@ -1,6 +1,7 @@
 package in.virit;
 
 import com.vaadin.flow.component.HasSize;
+import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -16,7 +17,7 @@ import in.virit.color.Color;
 @JsModule("./viritin/react-gauge.tsx")
 @CssImport("./viritin/gauge.css")
 @Tag("react-gauge")
-public class Gauge extends ReactAdapterComponent implements HasSize {
+public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
 
     public Gauge() {
         initializeDefaults();
@@ -79,6 +80,32 @@ public class Gauge extends ReactAdapterComponent implements HasSize {
 
     public void setType(GaugeType type) {
         setState("type", type.getValue());
+        // The stylesheet reserves the dial's height by type, before the browser has drawn it
+        getElement().setAttribute("type", type.getValue());
+    }
+
+    /**
+     * A unit shown right after the reading, e.g. {@code "°C"}, {@code "%"} or
+     * {@code " hPa"} (include the space if you want one). Also shown next to the
+     * dash of an empty gauge, so the dial still says what it would measure.
+     *
+     * @param unit the unit, or null or empty for none
+     */
+    public void setUnit(String unit) {
+        setState("unit", unit != null ? unit : "");
+    }
+
+    /**
+     * How many decimals the reading shows; sensors tend to report more than a
+     * dial should. Without this the reading shows up to two.
+     *
+     * @param decimals decimals to show, zero or more
+     */
+    public void setDecimals(int decimals) {
+        if (decimals < 0) {
+            throw new IllegalArgumentException("Decimals cannot be negative: " + decimals);
+        }
+        setState("decimals", decimals);
     }
 
     public void setArcWidth(int width) {

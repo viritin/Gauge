@@ -12,8 +12,8 @@ class ReactGaugeElement extends ReactAdapterElement {
     const [arc] = hooks.useState('arc', {});
     const [pointer] = hooks.useState('pointer', {});
     const [labels] = hooks.useState('labels', {});
-    const [gaugeType] = hooks.useState('gaugeType', 'default');
-    const [temperatureUnit] = hooks.useState('temperatureUnit', 'celsius');
+    const [unit] = hooks.useState('unit', '');
+    const [decimals] = hooks.useState('decimals', -1);
 
     // Deep clean function to remove null/undefined values
     const deepClean = (obj: any): any => {
@@ -85,37 +85,19 @@ class ReactGaugeElement extends ReactAdapterElement {
       return l;
     };
 
-    // Handle labels and formatTextValue for specialized gauge types
-    if (gaugeType === 'temperature' || gaugeType === 'humidity') {
-      const labelsToUse = applyTextDefaults(
-          (labels && typeof labels === 'object') ? deepClean(labels) : {});
-
-      // Ensure valueLabel exists
-      if (!labelsToUse.valueLabel) {
-        labelsToUse.valueLabel = {};
-      }
-
-      // Add appropriate formatTextValue function. An empty gauge keeps its
-      // unit next to the dash, so the dial still says what it would measure.
-      if (gaugeType === 'temperature') {
-        const unit = temperatureUnit === 'fahrenheit' ? '°F' : '°C';
-        labelsToUse.valueLabel.formatTextValue = (value: number) => (empty ? '–' : value) + unit;
-      } else if (gaugeType === 'humidity') {
-        labelsToUse.valueLabel.formatTextValue = (value: number) => (empty ? '–' : value) + '%';
-      }
-
-      props.labels = labelsToUse;
-    } else {
-      const cleanedLabels = applyTextDefaults(
-          (labels && typeof labels === 'object') ? deepClean(labels) : {});
-      if (empty) {
-        if (!cleanedLabels.valueLabel) {
-          cleanedLabels.valueLabel = {};
-        }
-        cleanedLabels.valueLabel.formatTextValue = () => '–';
-      }
-      props.labels = cleanedLabels;
+    // The reading: rounded to the decimals asked for, followed by the unit, and a
+    // dash while empty. An empty gauge keeps its unit next to the dash, so the
+    // dial still says what it would measure.
+    const labelsToUse = applyTextDefaults(
+        (labels && typeof labels === 'object') ? deepClean(labels) : {});
+    if (decimals >= 0) {
+      labelsToUse.valueLabel.maxDecimalDigits = decimals;
     }
+    if (empty || unit || decimals >= 0) {
+      const format = (v: number) => decimals >= 0 ? v.toFixed(decimals) : String(v);
+      labelsToUse.valueLabel.formatTextValue = (v: number) => (empty ? '–' : format(v)) + unit;
+    }
+    props.labels = labelsToUse;
 
     return <GaugeComponent {...props} />;
   }
