@@ -50,6 +50,16 @@ public class GaugeTest {
         assertTrue(arc.contains("\"width\":10"), arc);
     }
 
+    /** react-gauge-component reads these names; animate=false is what stops the per-frame redraws. */
+    @Test
+    public void thePointerAnimationCanBeTurnedOff() {
+        StateProbe gauge = new StateProbe();
+        gauge.setPointer(new Gauge.GaugePointer().setAnimate(false).setAnimationDuration(500));
+        String pointer = gauge.state("pointer", tools.jackson.databind.JsonNode.class).toString();
+        assertTrue(pointer.contains("\"animate\":false"), pointer);
+        assertTrue(pointer.contains("\"animationDuration\":500"), pointer);
+    }
+
     /** The stylesheet reserves the height by type, so the type is also an attribute. */
     @Test
     public void theTypeIsAnAttributeForTheStylesheet() {

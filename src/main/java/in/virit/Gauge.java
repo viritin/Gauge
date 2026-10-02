@@ -201,7 +201,9 @@ public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
         private Double length;
         private Integer width;
         private Boolean elastic;
+        private Boolean animate;
         private Integer animationDelay;
+        private Integer animationDuration;
 
         public GaugePointer() {
             // Initialize with defaults to avoid null serialization issues
@@ -232,8 +234,37 @@ public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
             return this;
         }
 
+        /**
+         * Whether a new value sweeps the pointer to it (the default) or the dial
+         * jumps there. Turn it off for a value that changes every few seconds: the
+         * default animation lasts three seconds and, with the Grafana type, redraws
+         * the arcs on every frame of it, so such a page is changing most of the
+         * time. Besides the work, mobile Safari takes a tap during a content change
+         * for a hover and drops its click, so the rest of the page needs a double
+         * tap.
+         *
+         * @param animate false to show new values without animation
+         * @return this pointer
+         */
+        public GaugePointer setAnimate(boolean animate) {
+            this.animate = animate;
+            return this;
+        }
+
         public GaugePointer setAnimationDelay(int delay) {
             this.animationDelay = delay;
+            return this;
+        }
+
+        /**
+         * How long the pointer takes to reach a new value, in milliseconds; 3000
+         * by default.
+         *
+         * @param duration the animation's length in milliseconds
+         * @return this pointer
+         */
+        public GaugePointer setAnimationDuration(int duration) {
+            this.animationDuration = duration;
             return this;
         }
 
@@ -242,7 +273,9 @@ public class Gauge extends ReactAdapterComponent implements HasSize, HasStyle {
         public Double getLength() { return length; }
         public Integer getWidth() { return width; }
         public Boolean getElastic() { return elastic; }
+        public Boolean getAnimate() { return animate; }
         public Integer getAnimationDelay() { return animationDelay; }
+        public Integer getAnimationDuration() { return animationDuration; }
     }
 
     public static class GaugeLabels {
